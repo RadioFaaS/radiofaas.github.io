@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEBE Engine — Monthly Report — September 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#faf8f3;--bg-card:#fff;--bg-tint:#f3f0e8;--border:#e3ddcf;--bstrong:#c8c0ad;--text:#1a1a1a;--muted:#6b6354;--dim:#8a8270;--accent:#1D9E75;--warn:#BA7517;--danger:#B23A36;--info:#2D6FB8;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Manrope',-apple-system,sans-serif;font-size:14px;line-height:1.55;}
+  body{max-width:960px;margin:0 auto;padding:48px 40px 64px;}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-0.01em;}
+  h1{font-size:34px;line-height:1.15;font-weight:600;letter-spacing:-0.02em;}
+  h2{font-size:22px;margin:40px 0 14px;}
+  .label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:12px;}
+  header{border-bottom:1px solid var(--bstrong);padding-bottom:28px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;}
+  header .meta{text-align:right;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7;}
+  .transition-box{background:linear-gradient(135deg,rgba(45,111,184,0.10),rgba(45,111,184,0.03));border:2px solid var(--info);border-radius:3px;padding:18px 24px;margin-bottom:24px;}
+  .transition-box .label{color:var(--info);margin-bottom:6px;}
+  .transition-box p{font-size:13px;line-height:1.6;color:var(--muted);}
+  .transition-box strong{color:var(--text);}
+  .book-section{margin-bottom:28px;}
+  .book-section h2{margin:0 0 12px;font-size:18px;}
+  .book-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:10px;}
+  .book-card{background:white;padding:16px 18px;}
+  .book-card .ticker{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--accent);}
+  .book-card .name{font-size:12px;color:var(--text);margin-top:2px;}
+  .book-card .cluster{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;}
+  .book-card .role{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin-top:2px;}
+  .book-card .driver{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4;}
+  .book-rotated{padding:10px 14px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7;background:var(--bg-tint);border:1px solid var(--border);border-top:none;}
+  .dual-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border:2px solid var(--bstrong);margin-bottom:8px;}
+  .dm{background:white;padding:18px 20px;text-align:center;}
+  .dm .label{display:block;margin-bottom:6px;}
+  .dm .value{font-family:'Fraunces',serif;font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .dm .value.accent{color:var(--accent);}
+  .dm .value.info{color:var(--info);}
+  .dm .value.warn{color:var(--warn);}
+  .dm .sub{font-size:10px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:8px;}
+  .kpi{background:white;padding:16px 16px 18px;position:relative;}
+  .kpi.accent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+  .kpi .label{display:block;margin-bottom:6px;}
+  .kpi .value{font-family:'Fraunces',serif;font-size:26px;font-weight:500;line-height:1.1;letter-spacing:-0.02em;font-variant-numeric:tabular-nums;}
+  .kpi .value.accent{color:var(--accent);}
+  .kpi .sub{font-size:10px;color:var(--muted);margin-top:4px;font-family:'JetBrains Mono',monospace;}
+  .manager-note{background:linear-gradient(135deg,rgba(29,158,117,0.05),rgba(29,158,117,0.01));border:1px solid rgba(29,158,117,0.20);border-left:4px solid var(--accent);padding:26px 32px;margin:36px 0;border-radius:2px;}
+  .manager-note h2{margin:0 0 16px;font-size:22px;}
+  .manager-note p{margin-bottom:14px;font-size:14px;line-height:1.7;}
+  .manager-note strong{font-weight:600;}
+  .manager-note .signoff{margin-top:24px;padding-top:18px;border-top:1px solid rgba(29,158,117,0.2);font-style:italic;font-family:'Fraunces',serif;color:var(--muted);font-size:13.5px;}
+  .chart-block{background:var(--bg-card);border:1px solid var(--border);padding:22px 24px;margin-bottom:24px;}
+  .legend-row{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:14px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .swatch{display:inline-block;width:9px;height:9px;border-radius:1px;margin-right:6px;vertical-align:middle;}
+  .dash{display:inline-block;width:14px;height:0;border-top:1.5px dashed #888780;margin-right:6px;vertical-align:middle;}
+  .toggle-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .toggle-btn{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:4px;background:var(--bg-tint);border:0.5px solid var(--border);font-size:13px;cursor:pointer;font-weight:500;}
+  .toggle-btn .check{width:14px;height:14px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;}
+  .toggle-btn .sublabel{color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace;}
+  .toggle-btn.pebe{border-left:3px solid var(--accent);cursor:default;}
+  .insight-box{margin-top:14px;padding:14px 18px;background:var(--bg-tint);border-radius:3px;font-size:13px;line-height:1.6;}
+  .insight-box strong{font-weight:600;}
+  .roll-section{background:var(--bg-card);border:1px solid var(--border);padding:22px 24px;margin-bottom:24px;}
+  .roll-section h3{margin-bottom:16px;}
+  .roll-cycle{padding:16px 20px;margin-bottom:12px;border-radius:3px;font-size:13px;line-height:1.6;}
+  .roll-cycle.offensive{background:rgba(29,158,117,0.06);border-left:3px solid var(--accent);}
+  .roll-cycle.defensive{background:rgba(186,117,23,0.06);border-left:3px solid var(--warn);}
+  .roll-cycle.closed-win{background:rgba(29,158,117,0.08);border-left:3px solid var(--accent);}
+  .roll-cycle .roll-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .roll-cycle .roll-type{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;}
+  .roll-cycle .roll-type.off{color:var(--accent);}
+  .roll-cycle .roll-type.def{color:var(--warn);}
+  .roll-cycle .roll-type.win{color:var(--accent);}
+  .roll-cycle .roll-net{font-family:'Fraunces',serif;font-size:20px;font-weight:600;}
+  .roll-cycle .roll-net.pos{color:var(--accent);}
+  .roll-cycle .roll-net.neg{color:var(--warn);}
+  .roll-cycle .roll-detail{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;}
+  .stress{background:linear-gradient(135deg,rgba(29,158,117,0.06),rgba(29,158,117,0.01));border-left:3px solid var(--accent);padding:18px 22px 20px;margin:24px 0 36px;font-size:13.5px;line-height:1.65;}
+  .stress .label{color:var(--accent);margin-bottom:6px;}
+  .two-col{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;margin-bottom:32px;}
+  .panel{background:var(--bg-card);border:1px solid var(--border);padding:20px 22px;}
+  .panel h3{margin-bottom:4px;}
+  .panel .panel-sub{font-size:11.5px;color:var(--muted);margin-bottom:14px;font-family:'JetBrains Mono',monospace;}
+  .outcome-legend{display:flex;flex-direction:column;gap:7px;margin-top:14px;font-size:13px;}
+  .outcome-legend .row{display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1px dotted var(--border);}
+  .outcome-legend .row:last-child{border-bottom:none;}
+  .outcome-legend .name{display:flex;align-items:center;gap:8px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{text-align:left;padding:10px 8px;font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:400;border-bottom:1px solid var(--bstrong);}
+  tbody td{padding:10px 8px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.right{text-align:right;}td.bold{font-weight:600;}
+  td.win{color:var(--accent);font-weight:500;}td.loss{color:var(--danger);font-weight:500;}
+  td .tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:1px 5px;border-radius:2px;margin-left:5px;}
+  td .roll-tag{color:var(--warn);background:rgba(186,117,23,0.1);}
+  td .new-tag{color:var(--accent);background:rgba(29,158,117,0.1);}
+  td .wind-tag{color:var(--info);background:rgba(45,111,184,0.1);}
+  .sec-header{display:flex;align-items:baseline;justify-content:space-between;margin-top:12px;margin-bottom:10px;}
+  .sec-header h2{margin:0;}.sec-header .note{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .sm-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:14px;}
+  .sm-cell{background:white;padding:12px 6px;text-align:center;}
+  .sm-cell .sm-month{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+  .sm-cell .sm-val{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--accent);font-variant-numeric:tabular-nums;}
+  .sm-cell .sm-val.low{color:var(--warn);}
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--border);font-size:11px;color:var(--dim);font-family:'JetBrains Mono',monospace;}
+  footer .row-1{display:flex;justify-content:space-between;margin-bottom:16px;}
+  footer .methodology{color:var(--muted);font-size:11px;line-height:1.7;padding-top:12px;border-top:1px solid var(--border);}
+  footer .methodology strong{color:var(--text);font-weight:600;}
+  @media(max-width:820px){body{padding:28px 20px 48px;}header{grid-template-columns:1fr;}header .meta{text-align:left;}h1{font-size:26px;}.book-grid{grid-template-columns:1fr 1fr;}.kpi-grid{grid-template-columns:repeat(2,1fr);}.dual-metrics{grid-template-columns:1fr 1fr 1fr;}.two-col{grid-template-columns:1fr;}.sm-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(max-width:480px){body{padding:16px 14px 40px;font-size:13px;}header{padding-bottom:20px;margin-bottom:12px;}header .meta{font-size:10px;}.eyebrow{font-size:9px;margin-bottom:8px;}h1{font-size:21px;line-height:1.2;}h2{font-size:18px;margin:24px 0 10px;}.book-grid{grid-template-columns:1fr;}.book-card{padding:12px 14px;}.book-card .ticker{font-size:18px;}.dual-metrics{grid-template-columns:1fr;}.dm{padding:14px 16px;text-align:left;}.dm .value{font-size:24px;}.kpi-grid{grid-template-columns:1fr 1fr;}.kpi{padding:12px 14px;}.kpi .value{font-size:22px;}.sm-grid{grid-template-columns:repeat(4,1fr);}.sm-cell .sm-val{font-size:14px;}.manager-note{padding:18px 16px;margin:24px 0;}.manager-note h2{font-size:18px;}.manager-note p{font-size:13px;}.chart-block{padding:14px 14px;}.legend-row{font-size:10px;}.toggle-btn{padding:5px 10px;font-size:11px;}.insight-box{padding:12px 14px;font-size:12px;}.roll-section{padding:14px 14px;}.roll-cycle{padding:12px 14px;}.roll-cycle .roll-header{flex-direction:column;align-items:flex-start;gap:6px;}.roll-cycle .roll-type{font-size:9px;}.roll-cycle .roll-net{font-size:18px;}.roll-cycle .roll-detail{font-size:10px;}.stress{padding:14px 16px;font-size:12px;margin:16px 0 24px;}.two-col{grid-template-columns:1fr;gap:14px;}.panel{padding:14px 16px;}table{font-size:12px;}thead th{padding:8px 6px;font-size:9px;}tbody td{padding:8px 6px;}.sec-header{flex-direction:column;gap:4px;}footer{margin-top:36px;}footer .row-1{flex-direction:column;gap:4px;font-size:10px;}footer .methodology{font-size:10px;}canvas{max-width:100%!important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="eyebrow">PEBE Engine · Monthly Report · September 2026</div>
+    <h1>Last chapter at Schwab — eight months,<br>$16,704, and a platform migration ahead</h1>
+    <div style="color:var(--muted);font-size:14px;margin-top:8px;">Operating period: Feb 1 – Sep 30, 2026 · Generated Oct 3, 2026</div>
+  </div>
+  <div class="meta">Strategy: PEBE covered-call engine<br>Operating period: 8 months<br>Last report on Schwab platform<br>Confidential — for prospective LP review</div>
+</header>
+
+<div class="transition-box">
+  <div class="label">Platform transition</div>
+  <p>This is the final LP report generated from the Schwab account. The engine is winding down open positions through mid-October, moving to cash ahead of the November 3 election, and migrating to Interactive Brokers under a dedicated LLC-titled account. <strong>Reporting resumes post-election from the new platform.</strong> The Schwab account will retain only QS (long-term conviction hold, excluded from engine metrics) and cash reserves. The engine's track record — 8 months, $16,704 realized, 8 consecutive positive months — carries forward.</p>
+</div>
+
+<section class="book-section">
+  <h2>Engine book — winding down</h2>
+  <div class="book-grid">
+    <div class="book-card">
+      <div class="ticker">COIN</div>
+      <div class="name">Coinbase Global Inc</div>
+      <div class="cluster">Crypto / Fintech</div>
+      <div class="role">Heavy Hitter #1 · 300 shares</div>
+      <div class="driver">Winding down. 3 open calls (180C, 182.5C, 185C) expiring through 10/16. Shares to be sold after final contract settles.</div>
+    </div>
+    <div class="book-card">
+      <div class="ticker">DAL</div>
+      <div class="name">Delta Air Lines Inc</div>
+      <div class="cluster">Airlines / Macro</div>
+      <div class="role">Heavy Hitter #2 · 300 shares</div>
+      <div class="driver">3 contracts expiring 10/2 (82C ×2, 83C). Shares to be sold after settlement.</div>
+    </div>
+    <div class="book-card">
+      <div class="ticker">CVNA</div>
+      <div class="name">Carvana Co</div>
+      <div class="cluster">Consumer / E-commerce</div>
+      <div class="role">Heavy Hitter #3 · 200 shares · scaled Sep 28</div>
+      <div class="driver">Position doubled from 100→200 shares at ~$60 (funded by SGOV liquidation). No open call — shares available for final write cycle or direct sale.</div>
+    </div>
+  </div>
+  <div class="book-rotated">
+    <strong>Rotated / Exited:</strong> SOFI (exited Aug 26) · UAL (rotated to DAL Jul) · AMD (assigned out Apr) · T · PYPL · XLE — single cycles
+  </div>
+</section>
+
+<section>
+  <h2>September income — booked vs realized</h2>
+  <div class="dual-metrics">
+    <div class="dm">
+      <span class="label">Booked Premium</span>
+      <div class="value info">$5,541</div>
+      <div class="sub">3rd highest booked month · engine productive</div>
+    </div>
+    <div class="dm">
+      <span class="label">Realized P&amp;L</span>
+      <div class="value warn">$1,194</div>
+      <div class="sub">COIN roll friction absorbed · 2 bundles closed net positive</div>
+    </div>
+    <div class="dm">
+      <span class="label">Open Premium</span>
+      <div class="value accent">$2,852</div>
+      <div class="sub">5 contracts in flight → closes in Oct</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Eight-month summary</h2>
+  <div class="sm-grid">
+    <div class="sm-cell"><div class="sm-month">Feb</div><div class="sm-val">$1.2K</div></div>
+    <div class="sm-cell"><div class="sm-month">Mar</div><div class="sm-val">$1.9K</div></div>
+    <div class="sm-cell"><div class="sm-month">Apr</div><div class="sm-val">$2.9K</div></div>
+    <div class="sm-cell"><div class="sm-month">May</div><div class="sm-val">$2.8K</div></div>
+    <div class="sm-cell"><div class="sm-month">Jun</div><div class="sm-val">$3.7K</div></div>
+    <div class="sm-cell"><div class="sm-month">Jul</div><div class="sm-val">$2.7K</div></div>
+    <div class="sm-cell"><div class="sm-month">Aug</div><div class="sm-val low">$0.2K</div></div>
+    <div class="sm-cell"><div class="sm-month">Sep</div><div class="sm-val low">$1.2K</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Key indicators — cumulative eight-month</h2>
+  <div class="kpi-grid">
+    <div class="kpi accent">
+      <span class="label">Realized P&amp;L (lifetime)</span>
+      <div class="value accent">$16,704</div>
+      <div class="sub">8 consecutive positive months</div>
+    </div>
+    <div class="kpi accent">
+      <span class="label">Avg monthly realized</span>
+      <div class="value accent">$2,088</div>
+      <div class="sub">8 months · $2,362 ex-Aug</div>
+    </div>
+    <div class="kpi accent">
+      <span class="label">Annualized ROC</span>
+      <div class="value accent">30.5%</div>
+      <div class="sub">$2,088 × 12 ÷ $82,261</div>
+    </div>
+    <div class="kpi">
+      <span class="label">Win rate</span>
+      <div class="value">75.5%</div>
+      <div class="sub">normalizing toward steady state</div>
+    </div>
+    <div class="kpi">
+      <span class="label">True losses</span>
+      <div class="value">1</div>
+      <div class="sub">XLE −$69 · all others = roll friction</div>
+    </div>
+    <div class="kpi">
+      <span class="label">Contracts closed</span>
+      <div class="value">53+</div>
+      <div class="sub">8 months of live execution</div>
+    </div>
+    <div class="kpi">
+      <span class="label">VIX (Sep close)</span>
+      <div class="value">16.3</div>
+      <div class="sub">calm heading into election</div>
+    </div>
+    <div class="kpi">
+      <span class="label">Strategy capital</span>
+      <div class="value">$82,261</div>
+      <div class="sub">no new capital added</div>
+    </div>
+  </div>
+</section>
+
+<section class="manager-note">
+  <div class="eyebrow">From the manager</div>
+  <h2>Last chapter at Schwab — the engine matures, the platform changes</h2>
+
+  <p>
+    September's realized P&L of $1,194 is below the 8-month average. This requires honest context rather than explanation away. The month's activity was dominated by COIN roll management — three rolls across two bundle chains consumed $2,738 in close costs against $3,637 in re-entry premium. The roll cycles were net positive, but the friction reduced realized income in the settlement window. Booked premium of $5,541 — the third-highest of the operating period — confirms the engine was working productively. The gap between booked and realized is a timing artifact, not an underperformance signal, and $2,852 in open premium carries forward into October's settlement.
+  </p>
+
+  <p>
+    <strong>Two COIN bundles closed this month — both net positive wins under the bundle methodology.</strong> Bundle B (originating from the 182.50C on August 20) closed at +$519 after traversing 182.50→195→197.50 through three roll events. Bundle C (originating from the 200C on August 21) closed at +$1,074 through the same merged roll path. Bundle A (the 160→165→175→180 chain) remains open with a running net of +$162 — thin but positive after five rolls across 29 days. This bundle's 180C expires October 2 and will determine its final status.
+  </p>
+
+  <p>
+    CVNA scaled from 100 to 200 shares on September 28, funded by a $4,731 SGOV liquidation. The additional 100 shares were purchased at approximately $60 — well below the original August entry at $73, bringing the blended cost basis to $66.47. Two clean harvest cycles in September produced +$163 and +$191 at 82% capture each. CVNA is proving to be the stable, low-drama name the book needed — consistent premiums without the roll management overhead that COIN demands.
+  </p>
+
+  <p>
+    DAL's 81C ×2 position was defensively rolled to the 82C ×2 for a net credit of +$27. This is the standing below-cost-basis discipline applied correctly — DAL's cost basis sits at approximately $87 (blended after the Aug scaling), and the 81C strike was $6 below. The roll moved the strike closer to basis while generating a small credit. Three DAL contracts (82C ×2, 83C) expire October 2.
+  </p>
+
+  <p>
+    <strong>This is the final report generated from the Schwab platform.</strong> The engine is entering a planned wind-down through mid-October. Remaining positions — COIN (3 calls expiring through 10/16), DAL (3 calls expiring 10/2), and CVNA (uncovered, available for a final write or direct sale) — will close by natural expiry or harvest. Shares will be sold after contracts settle. The target is fully cash before November 3.
+  </p>
+
+  <p>
+    The engine resumes at Interactive Brokers under a dedicated LLC-titled account post-election. The migration carries the full track record: 8 months of continuous operation, $16,704 in realized premium, 8 consecutive positive months across conditions ranging from VIX 35 to VIX 14, one true loss in the entire period, and a rules-based framework that has been tested by 15%+ single-name rallies, crypto selloffs, below-cost-basis assignment risk, and two months of compressed volatility. The platform changes. The engine does not.
+  </p>
+
+  <div class="signoff">— The manager</div>
+</section>
+
+<section>
+  <h2>September bundle analysis</h2>
+  <div class="roll-section">
+    <div class="roll-cycle closed-win">
+      <div class="roll-header">
+        <span class="roll-type win">Bundle B · COIN 182.50→195→197.50 · CLOSED</span>
+        <span class="roll-net pos">+$519</span>
+      </div>
+      <div class="roll-detail">Open: STO 182.50C 8/20 +$533 · Roll 8/31: BTC -$800 → STO 195C +$755<br>Merged with Bundle C at 195 strike · Roll 9/14: BTC 195C (½) -$501 → STO 197.50C +$682<br>Final: BTC 197.50C (½) 9/15 -$152 · Duration: 26 days · 3 rolls</div>
+    </div>
+    <div class="roll-cycle closed-win">
+      <div class="roll-header">
+        <span class="roll-type win">Bundle C · COIN 200→195→197.50 · CLOSED</span>
+        <span class="roll-net pos">+$1,074</span>
+      </div>
+      <div class="roll-detail">Open: STO 200C 8/21 +$551 · Harvest 8/31: BTC -$82 → STO 195C +$574<br>Merged with Bundle B at 195 strike · Roll 9/14: BTC 195C (½) -$501 → STO 197.50C +$682<br>Final: BTC 197.50C (½) 9/15 -$152 · Duration: 25 days · 2 rolls</div>
+    </div>
+    <div class="roll-cycle offensive">
+      <div class="roll-header">
+        <span class="roll-type off">Bundle A · COIN 160→165→175→180 · OPEN</span>
+        <span class="roll-net pos">+$162</span>
+      </div>
+      <div class="roll-detail">Running since 8/17 · 5 rolls · Strikes: $160→$165→$175→$180<br>Sep activity: BTC 165C -$1,659 → STO 175C +$1,224 (Roll 4, net -$434)<br>BTC 175C -$1,080 → STO 180C +$1,048 (Roll 5, net -$31)<br>180C ($1,048) expires 10/2 · outcome determines bundle P&L</div>
+    </div>
+    <div class="roll-cycle defensive">
+      <div class="roll-header">
+        <span class="roll-type def">DAL · 81C→82C · defensive roll</span>
+        <span class="roll-net pos">+$27</span>
+      </div>
+      <div class="roll-detail">9/14: BTC 81C ×2 -$344 → STO 82C ×2 +$372 · Net credit on a defensive roll<br>Below-cost-basis rule applied: $81 strike vs ~$87 blended basis</div>
+    </div>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--bg-tint);border-radius:3px;font-size:13px;">
+      <strong>September bundles: +$1,593 closed · +$162 running · +$27 defensive roll.</strong> Two CVNA harvests added +$354 (clean cycles, no rolls). The per-contract loss column absorbed $2,738 in COIN roll close costs — the bundle view shows both resulting bundles closed net positive.
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Monthly realized P&L — full operating period</h2>
+  <div class="chart-block">
+    <div class="legend-row">
+      <span><span class="swatch" style="background:var(--accent);"></span>Realized</span>
+      <span><span class="swatch" style="background:rgba(45,111,184,0.4);"></span>Booked (STO written)</span>
+      <span><span class="dash"></span>Avg realized $2,088</span>
+    </div>
+    <div style="position:relative;height:280px;"><canvas id="monthlyChart"></canvas></div>
+    <div class="insight-box"><strong>The two-speed picture.</strong> Booked premium has been consistently strong — $5K+ in three of the last four months. Realized lags in rotation-heavy months (Aug, Sep) when roll friction absorbs premium within the settlement window. The lifetime average of $2,088/month at 30.5% ROC reflects both the productive months and the friction months. Over 8 months the pattern is clear: the engine generates income consistently, the timing of when it settles varies.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Total return — PEBE vs benchmarks</h2>
+  <div class="chart-block">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Growth of $100 invested Feb 1, 2026. PEBE = TWR from confirmed account values (ex-QS). SPY Sep 30: $762.63. VIX: 16.34. Engine winding down — final benchmark reading before IBKR migration.</div>
+    <div class="toggle-row">
+      <span class="toggle-btn pebe"><span class="check" style="background:var(--accent);">✓</span>PEBE engine<span class="sublabel">always shown</span></span>
+      <button id="btn-spy" class="toggle-btn"><span class="check" id="check-spy" style="background:var(--info);">✓</span>SPY<span class="sublabel">market alternative</span></button>
+      <button id="btn-jepq" class="toggle-btn"><span class="check" id="check-jepq" style="background:var(--warn);">✓</span>JEPQ<span class="sublabel">strategy peer</span></button>
+    </div>
+    <div style="position:relative;height:320px;"><canvas id="benchmarkChart"></canvas></div>
+    <div class="insight-box"><strong>The eight-month picture.</strong> PEBE total return and SPY have traded leads throughout the period. SPY's advantage comes from concentrated rallies (April, early June) where the covered-call cap limited PEBE's participation. PEBE's advantage comes from income generation during flat and down periods (Feb drawdown, July COIN volatility, Aug/Sep VIX compression). At the close of the Schwab period, all three strategies sit within a few percentage points of each other — confirming that the engine produces competitive total returns while generating a fundamentally different income stream than either benchmark.</div>
+  </div>
+</section>
+
+<section class="stress">
+  <div class="label">Eight-month stress summary</div>
+  <strong>Feb:</strong> VIX 35 spike, engine ramp-up. <strong>Mar-Apr:</strong> Market recovery, AMD assigned, first scaling. <strong>May:</strong> Sideways, steady income, COIN defensive rolls begin. <strong>Jun:</strong> UAL +27% captured across two contracts, crypto selloff absorbed. <strong>Jul:</strong> COIN +15% rally, offensive roll program tested — $3,332 net credits from forced repositioning. <strong>Aug:</strong> VIX at 2026 low (14.1), SOFI exited, DAL scaled, CVNA entered — rotation month. <strong>Sep:</strong> Bundle methodology proven — two COIN bundles closed net positive, CVNA clean harvests, DAL defensive roll discipline applied. The engine operated through every environment a premium seller can encounter in a single calendar year.
+</section>
+
+<section>
+  <div class="sec-header">
+    <h2>Open contracts — wind-down schedule</h2>
+    <span class="note">$2,852 · 5 contracts · all expiring by 10/16</span>
+  </div>
+  <div class="panel" style="padding:18px 22px;">
+    <table>
+      <thead><tr><th>Contract</th><th>Opened</th><th>Expires</th><th class="right">Qty</th><th class="right">Premium</th><th>Context</th></tr></thead>
+      <tbody>
+        <tr><td class="bold">COIN 180 C<span class="tag wind-tag">WIND-DOWN</span></td><td>Sep 15</td><td>Oct 2</td><td class="right">1</td><td class="right">+$1,048</td><td style="font-size:11px;color:var(--muted);">Bundle A final leg · +$162 running</td></tr>
+        <tr><td class="bold">COIN 182.5 C<span class="tag wind-tag">WIND-DOWN</span></td><td>Sep 17</td><td>Oct 9</td><td class="right">1</td><td class="right">+$612</td><td style="font-size:11px;color:var(--muted);">New bundle · let expire or harvest</td></tr>
+        <tr><td class="bold">COIN 185 C<span class="tag wind-tag">WIND-DOWN</span></td><td>Sep 17</td><td>Oct 16</td><td class="right">1</td><td class="right">+$687</td><td style="font-size:11px;color:var(--muted);">Last COIN contract · final exit after close</td></tr>
+        <tr><td class="bold">DAL 82 C<span class="tag wind-tag">WIND-DOWN</span></td><td>Sep 14</td><td>Oct 2</td><td class="right">2</td><td class="right">+$372</td><td style="font-size:11px;color:var(--muted);">Below basis · expiring today</td></tr>
+        <tr><td class="bold">DAL 83 C<span class="tag wind-tag">WIND-DOWN</span></td><td>Aug 31</td><td>Oct 2</td><td class="right">1</td><td class="right">+$132</td><td style="font-size:11px;color:var(--muted);">Below basis · expiring today</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>What carries forward to IBKR</h2>
+  <div class="panel" style="padding:20px 24px;margin-bottom:24px;">
+    <table>
+      <thead><tr><th>Metric</th><th class="right">Value</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="bold">Operating period</td><td class="right">8 months</td><td style="font-size:11px;color:var(--muted);">Feb 1 – Oct ~16, 2026</td></tr>
+        <tr><td class="bold">Realized P&L</td><td class="right win">$16,704</td><td style="font-size:11px;color:var(--muted);">+ Oct wind-down settlements</td></tr>
+        <tr><td class="bold">Avg monthly</td><td class="right">$2,088</td><td style="font-size:11px;color:var(--muted);">8 months, all conditions</td></tr>
+        <tr><td class="bold">ROC (annualized)</td><td class="right">30.5%</td><td style="font-size:11px;color:var(--muted);">on $82,261 static capital</td></tr>
+        <tr><td class="bold">Consecutive positive months</td><td class="right">8 of 8</td><td style="font-size:11px;color:var(--muted);">including rotation months</td></tr>
+        <tr><td class="bold">True losses</td><td class="right">1</td><td style="font-size:11px;color:var(--muted);">XLE −$69 · rest = roll friction</td></tr>
+        <tr><td class="bold">Roll framework</td><td class="right">3 types</td><td style="font-size:11px;color:var(--muted);">Offensive, Defensive, Harvest — codified</td></tr>
+        <tr><td class="bold">Bundle methodology</td><td class="right">Validated</td><td style="font-size:11px;color:var(--muted);">Per-contract + bundle view, both reported</td></tr>
+        <tr><td class="bold">Names tested</td><td class="right">8</td><td style="font-size:11px;color:var(--muted);">COIN AMD UAL SOFI DAL CVNA T PYPL XLE</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="row-1"><span>PEBE Engine · Monthly Report · September 2026 · Final Schwab Report · Confidential</span><span>Generated Oct 3, 2026</span></div>
+  <div class="methodology">
+    <strong>Methodology.</strong> Realized P&L = net per closed contract (STO minus BTC), counted at close date. Booked = total STO written in period. Open = STO on active contracts. Avg monthly = Feb–Sep realized ÷ 8 = $2,088. ROC = $2,088 × 12 ÷ $82,261 = 30.5%. Bundle tracking: each independent STO open = one bundle; rolls are internal events within the bundle; bundle P&L = sum of all STO minus all BTC across the chain; merged contracts split proportionally across originating bundles. Roll types: offensive (net credit required), defensive (net debit acceptable if less than assignment loss), harvest (80%+ captured). Win rate reflects per-contract methodology; bundle methodology shown alongside for LP clarity. QS excluded. BTO/STC excluded. Total return benchmark: PEBE TWR via Modified Dietz (ex-QS). SPY Sep 30: $762.63. VIX Sep 30: 16.34. This export covers Apr 3 – Oct 3, 2026; Feb–Mar data supplemented from confirmed prior reports. Past performance does not guarantee future results.
+  </div>
+</footer>
+
+<script>
+const A='#1D9E75',AL='rgba(29,158,117,0.25)',W='#BA7517',D='#888780',R='#B23A36',I='#2D6FB8';
+
+new Chart(document.getElementById('monthlyChart'),{
+  type:'bar',
+  data:{
+    labels:['Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'],
+    datasets:[
+      {label:'Booked (STO)',data:[1236,2100,2745,9715,3710,6532,4769,5541],backgroundColor:'rgba(45,111,184,0.25)',borderColor:I,borderWidth:1,borderRadius:3,barPercentage:0.7,order:2},
+      {label:'Realized',data:[1236,1925,2916,2841,3732,2691,169,1194],backgroundColor:A,borderRadius:3,barPercentage:0.7,order:1},
+      {type:'line',label:'Avg realized $2,088',data:[2088,2088,2088,2088,2088,2088,2088,2088],borderColor:D,borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false,order:0},
+    ],
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>`${ctx.dataset.label}: $${ctx.raw.toLocaleString()}`},backgroundColor:'#1a1a1a',titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'Manrope',size:12}}},
+    scales:{x:{grid:{display:false},ticks:{color:'#6b6354',font:{family:'JetBrains Mono',size:11}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#6b6354',font:{family:'JetBrains Mono',size:11},callback:(v)=>'$'+(v/1000).toFixed(1)+'k'}}},
+  }
+});
+
+const bmLabels=['Feb 1','Feb 28','Mar 31','Apr 30','May 31','Jun 30','Jul 31','Aug 31','Sep 30'];
+const pebeD=[100.00,98.06,100.05,103.30,105.50,108.10,109.20,110.40,110.50];
+const spyD =[100.00,95.00,94.32,104.77,109.50,109.20,108.60,111.60,110.50];
+const jepqD=[100.00,97.00,96.52,103.95,107.50,107.80,106.10,108.20,107.80];
+const startD=[100,100,100,100,100,100,100,100,100];
+
+const bmChart=new Chart(document.getElementById('benchmarkChart'),{
+  type:'line',
+  data:{labels:bmLabels,datasets:[
+    {label:'PEBE engine (TWR)',data:pebeD,borderColor:A,borderWidth:2.8,pointBackgroundColor:A,pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:4,tension:0.3,fill:false,order:1},
+    {label:'SPY total return',data:spyD,borderColor:I,borderWidth:2.2,borderDash:[6,4],pointBackgroundColor:I,pointStyle:'rectRot',pointRadius:4,tension:0.3,fill:false,order:2},
+    {label:'JEPQ total return',data:jepqD,borderColor:W,borderWidth:2.2,borderDash:[3,4],pointBackgroundColor:W,pointStyle:'triangle',pointRadius:5,tension:0.3,fill:false,order:3},
+    {label:'Baseline',data:startD,borderColor:D,borderDash:[2,4],borderWidth:1,pointRadius:0,fill:false,order:4},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:(ctx)=>{const v=ctx.raw,r=(v-100).toFixed(1),s=r>=0?'+':'';return `${ctx.dataset.label}: $${v.toFixed(2)} (${s}${r}%)`;}}
+    ,backgroundColor:'#1a1a1a',titleFont:{family:'JetBrains Mono',size:10},bodyFont:{family:'Manrope',size:12}}},
+    scales:{x:{grid:{display:false},ticks:{color:'#6b6354',font:{family:'JetBrains Mono',size:10}}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#6b6354',font:{family:'JetBrains Mono',size:11},callback:(v)=>'$'+v.toFixed(0)},min:91,max:115}},
+  }
+});
+let spyOn=true,jepqOn=true;
+function toggleBm(idx,btnId,checkId,on){bmChart.data.datasets[idx].hidden=!on;bmChart.update();const b=document.getElementById(btnId),c=document.getElementById(checkId);if(on){c.textContent='✓';b.style.opacity='1';}else{c.textContent='';c.style.opacity='0.3';b.style.opacity='0.6';}}
+document.getElementById('btn-spy').addEventListener('click',()=>{spyOn=!spyOn;toggleBm(1,'btn-spy','check-spy',spyOn);});
+document.getElementById('btn-jepq').addEventListener('click',()=>{jepqOn=!jepqOn;toggleBm(2,'btn-jepq','check-jepq',jepqOn);});
+</script>
+</body>
+</html>
